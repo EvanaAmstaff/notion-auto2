@@ -1,0 +1,28 @@
+name: Notion Auto Import
+
+on:
+  schedule:
+    - cron: "0 0 * * *"   # 毎日 0:00（日本時間+9）
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: リポジトリ取得
+        uses: actions/checkout@v3
+
+      - name: Node セットアップ
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: パッケージインストール
+        run: npm install
+
+      - name: 実行
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          DATABASE_ID: ${{ secrets.DATABASE_ID }}
+        run: node index.js
