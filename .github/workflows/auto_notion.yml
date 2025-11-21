@@ -1,0 +1,28 @@
+name: Auto Save to Notion
+
+on:
+  schedule:
+    - cron: "0 15 * * *"   # 毎日24:00 JST（15:00 UTC）
+  workflow_dispatch:       # 手動実行も可能
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run index.js
+        run: node index.js
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          DATABASE_ID: ${{ secrets.DATABASE_ID }}
